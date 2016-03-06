@@ -1,5 +1,6 @@
 package connectors;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -138,42 +139,39 @@ public class SQLConnector {
 			
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public Customer getCustomer(int id){
+		
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		Connection con = getConnection();
+		
+			try {
+				stmt = con.prepareStatement("SELECT * FROM pa1.customers "
+						+ "WHERE cust_id = ?");
+			
+			stmt.setInt(1, id);
+			rs = stmt.executeQuery();
+			rs.next();
+			Customer match = new Customer(rs.getString("fname"),
+					rs.getString("lname"), rs.getString("phone_num"), rs.getString("address"),
+					rs.getString("city"),rs.getString("state"), rs.getString("zip"),
+					rs.getString("checkin"),rs.getString("checkout"));
+					
+			
+				
+				return match;
+			
+			
+			} catch(SQLException e){
+			e.printStackTrace();
+			System.out.println("Invalid format, please try again");
+			return null;
+		}
+		
+		
+		
+		
+	}
 	
 	
 	public boolean insertCustomer(Customer customer) {
@@ -228,8 +226,6 @@ public class SQLConnector {
 		}
 		return false;
 	};
-		
-		
 		
 		
 
@@ -317,7 +313,7 @@ public class SQLConnector {
 					stmt.close();
 					return false;
 				}
-				stmt = conn.prepareStatement("UPDATE pa1.rooms SET occupant_id = ?  WHERE room_number = ?");
+				stmt = conn.prepareStatement("UPDATE pa1.rooms SET occupant_id = ? WHERE room_number = ?");
 				stmt.setInt(1, id);
 				stmt.setInt(2, room_num);
 				boolean success = stmt.executeUpdate() > 0;
@@ -352,9 +348,35 @@ public class SQLConnector {
 	};
 	
 
+	public List<Customer> getCurrentCustomers(){
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		Connection con = getConnection();
+		List<Customer> results = null;
+		try {
+			results = new ArrayList<Customer>();
+			stmt = con.prepareStatement("SELECT a.lname,a.fname,a.cust_id,a.phone_num "
+					+ "FROM pa1.rooms as b, pa1.customers as a, WHERE (b.occupant_id IS NULL) AND (b.occupant_id = a.cust_id);");
+			rs = stmt.executeQuery();
+			rs.next();
+			while (rs.next()) {
+				Customer cust = new Customer();
+				cust.setFname(rs.getString("fname"));
+				cust.setLname(rs.getString("lname"));
+				cust.setPhone_num(rs.getString("phone_num"));
+				cust.setCust_id(rs.getInt("cust_id"));
+				results.add(cust);
+			}
+			
+			return results;
+	}catch (SQLException ex) {
+		// handle any errors
+		System.out.println("SQLException: " + ex.getMessage());
+		System.out.println("SQLState: " + ex.getSQLState());
+		System.out.println("VendorError: " + ex.getErrorCode());
+	} 
+	return null;
 	
 	
-	
-	
-	
+}
 }

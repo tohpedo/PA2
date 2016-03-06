@@ -7,7 +7,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+
+import models.Customer;
 
 
 
@@ -145,7 +149,33 @@ public class HotelReservationSystem {
 				
 			}
 //-------------------------------------------------------------------------------------
-			else if(option==3){
+			else if(option == 4){
+				
+				System.out.println("Get customer information from ID:");
+				System.out.print("Enter the ID below");
+				String cust_id = sc.nextLine();
+				
+				try {
+					String request = "http://localhost:8080/PA1/Hotel" + "?option=" + option + "&customer_id=" + cust_id;
+					URL url = new URL( request );
+					HttpURLConnection conn= (HttpURLConnection) url.openConnection();  
+					conn.setInstanceFollowRedirects( false );
+					conn.setRequestMethod( "GET" );
+					conn.setUseCaches( false );
+					BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+					String next_record = null;
+					while ((next_record = reader.readLine()) != null) {
+						System.out.println(next_record);
+							
+				}
+						
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw new RuntimeException();
+				} 
+				break;
+				
+				
 				
 			}
 			
@@ -155,8 +185,25 @@ public class HotelReservationSystem {
 			else if(option==5){
 				System.out.println("Please enter the name of the customer you are looking for:");
 				String inputName = sc.nextLine();
-				System.out.println("Desired room number:");
-				String room_num = sc.nextLine();
+
+				try {
+					String request = "http://localhost:8080/PA1/Hotel" + "?option=" + option + "&name=" + inputName;
+					URL url = new URL( request );
+					HttpURLConnection conn= (HttpURLConnection) url.openConnection();  
+					conn.setInstanceFollowRedirects( false );
+					conn.setRequestMethod( "GET" );
+					conn.setUseCaches( false );
+					BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+					String next_record = null;
+					while ((next_record = reader.readLine()) != null) {
+						System.out.println(next_record);
+				}
+						
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw new RuntimeException();
+				} 
+				break;
 				
 				
 				
@@ -164,6 +211,29 @@ public class HotelReservationSystem {
 			}
 //-------------------------------------------------------------------------------------
 			else if(option==6){
+				
+				System.out.println("Retrieving all customers who are currently checked in...");
+
+				try {
+					String request = "http://localhost:8080/PA1/Hotel" + "?option=" + option;
+					URL url = new URL( request );
+					HttpURLConnection conn= (HttpURLConnection) url.openConnection();  
+					conn.setInstanceFollowRedirects( false );
+					conn.setRequestMethod( "GET" );
+					conn.setUseCaches( false );
+					BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+					String next_record = null;
+					while ((next_record = reader.readLine()) != null) {
+						System.out.println(next_record);
+				}
+						
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw new RuntimeException();
+				} 
+				
+				
+				
 				
 			}
 //-------------------------------------------------------------------------------------

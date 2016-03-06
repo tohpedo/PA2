@@ -3,17 +3,17 @@ package models;
 public class Transaction {
 	
 	private int trans_id;
-	private int cust_id;
-	private int room_id;
+	private int payee_id;
+	private int room;
 	private int amount;
 	private int cc;
 	private int exp_date;
 	
 	//CONSTRUCTORS
 	
-	public Transaction(int pTrans_id, int pCust_id, int pRoom_id, int pAmount, int pCC, int pExp_date){
-		this.cust_id = pCust_id;
-		this.room_id = pRoom_id;
+	public Transaction(int pTrans_id, int pPayee_id, int pRoom, int pAmount, int pCC, int pExp_date){
+		this.payee_id = pPayee_id;
+		this.room = pRoom;
 		this.amount = pAmount;
 		this.cc = pCC;
 		this.exp_date = pExp_date;
@@ -40,25 +40,25 @@ public class Transaction {
 		this.cc = cc;
 	}
 	public int getAmount() {
-		return amount;
+		return this.amount;
 	}
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
-	public int getRoom_id() {
-		return room_id;
+	public int getRoom_num() {
+		return this.room;
 	}
-	public void setRoom_id(int room_id) {
-		this.room_id = room_id;
+	public void setRoom_num(int room_num) {
+		this.room = room_num;
 	}
-	public int getCust_id() {
-		return cust_id;
+	public int getPayee_id() {
+		return this.payee_id;
 	}
-	public void setCust_id(int cust_id) {
-		this.cust_id = cust_id;
+	public void setPayee_id(int payee_id) {
+		this.payee_id = payee_id;
 	}
 	public int getTrans_id() {
-		return trans_id;
+		return this.trans_id;
 	}
 	public void setTrans_id(int trans_id) {
 		this.trans_id = trans_id;

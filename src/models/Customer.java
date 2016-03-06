@@ -85,10 +85,10 @@ public class Customer {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public String getPhone_number() {
+	public String getPhone_num() {
 		return phone_num;
 	}
-	public void setPhone_number(String phone_number) {
+	public void setPhone_num(String phone_number) {
 		this.phone_num = phone_number;
 	}
 	public String getLname() {
@@ -145,16 +145,6 @@ public class Customer {
 
 
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

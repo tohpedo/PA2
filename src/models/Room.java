@@ -17,7 +17,7 @@ public class Room {
 	public Room(String pType, int pPrice, int pOccupant){
 		this.type = pType;
 		this.price = pPrice;
-		this.occupant_id=pOccupant;
+		this.occupant_id = pOccupant;
 	}
 	
 	public Room(){

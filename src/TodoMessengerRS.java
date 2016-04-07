@@ -1,10 +1,12 @@
+
+
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
-@ApplicationPath("/TodoMessage")
+@ApplicationPath("TodoMessage")
 public class TodoMessengerRS extends Application{
 
 	@Override

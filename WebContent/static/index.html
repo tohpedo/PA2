@@ -5,50 +5,99 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-<title>Todo Message System</title>
+<title>Hotel Management System</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-	<div>
-		<h1 id="responseHeader"> Choose an option below </h1>
+	<div id="responseHeader">
+		<h3>Please select an option below</h3>
 	</div>
 	<div> 
-		<h1>Create/Update a Todo Message : </h1> 
-		<form> 
-			<p>Enter an ID: <input id="todoId" type="text"> </p>
-			<p>Enter a message: <input id="todoMessage" type="text"> </p>
-			<br/> 
-			<button id="createTodo" type="button" class="btn btn-lg btn-primary">Create/Update Todo</button> 
+		<h3>New Customer: </h3> 
+		<form>  
+			<button id="newCustomer" type="button" class="btn btn-lg btn-primary">Register</button> 
  		</form> 
  	</div>
+ 	<div id="Registration" style="display: none">
+ 		<form>
+ 			First Name: <input id="newCustomerFirstName" type="text"><br/>
+ 			Last Name: <input id="newCustomerLastName" type="text"><br/>
+ 			Phone Number: <input id="newCustomerPhoneNumber" type="text"><br/>
+ 			Billing Address: <input id="newCustomerBillingAddress" type="text"><br/>
+ 			Billing Zip: <input id="newCustomerBillingZip" type="text"><br/>
+ 			Billing City: <input id="newCustomerBillingCity" type="text"><br/>
+ 			Billing State: <input id="newCustomerBillingState" type="text"><br/>
+ 			Check-In Date: <input id="customerCheckIn" type="text"><br/>
+ 			Check-Out Date: <input id="customerCheckOut" type="text"><br/>
+ 			<button id="createNewCustomer" type="button" class="btn btn-sm btn-primary">Submit</button>
+ 		</form>
+ 	</div>
+
  	<br/>
  	<div>
+ 		<h3>Reserve a Room:</h3>
 		<form>
-			<h1>Get a Todo message: </h1>
-			<p>Enter an ID: <input id="todoId_get" type="text"> </p>
-			<br/>
-			<button id="getJSON" type="button" class="btn btn-lg btn-primary">Get message using JSON</button>
-			<button id="getXML" type="button" class="btn btn-lg btn-primary">Get message using XML</button>
+			<button id="reserveRoom" type="button" class ="btn btn-lg btn-primary">Start here!</button>
+		</form>
+	</div>
+	<div id="RoomReservation" style="display: none">
+		<form>
+			Customer Id: <input id="reserveCustId" type="text">
+			Room Number: <input id="reserveRoomNum" type="text">
+			<br/>	
+			<button id="makeReservation" type="button" class="btn btn-sm btn-primary">Submit</button>	
 		</form>
 	</div>
 	<br/>
  	<div>
- 		<h1>Get all Todo messages</h1>
-		<button id="getAllJSON" type="button" class="btn btn-lg btn-primary">Get all mesages using JSON</button>
-		<button id="getAllXML" type="button" class="btn btn-lg btn-primary">Get all messages using XML</button>
+ 		<h3>Make a payment:</h3>
+ 		<form>
+			<button id="makePayment" type="button" class="btn btn-lg btn-primary">New Transaction</button>
+		</form>
+	</div>
+	<div id="PaymentInformation" style="display: none">
+		<form>
+			Customer ID: <input id="paymentCustId" type="text"><br/>
+			Room number: <input id="paymentRoomNum" type="text"><br/>
+			Card Number: <input id="paymentCardNum" type="text"><br/>
+			Expiration Date: <input id="paymentExpiration" type="text"><br/>
+			Amount Paid: <input id="paymentAmount" type="text"><br/>
+			<button id="submitPayment" type="button" class="btn btn-sm btn-primary">Submit Payment</button>
+		</form>
 	</div>
 	<br>
 	<div>
-		<h1>Delete a Todo message: </h1>
+		<h1>Find customer</h1>
 		<form>
-		<p>Enter an ID: <input id="todoId_delete" type="text"> </p>
-		<br/>
-		<button id="deleteTodo" type="button" class="btn btn-lg btn-primary">Delete Todo message</button>
+			<h3>How would you like to search for a customer?</h3>
+			<br/>
+			By ID:<input id="findCustomerID" type="text">
+			<button id="searchCustomerID" type="button" class="btn btn-sm btn-primary">Submit</button>
+			<br/>
+			By Name:<input id="findCustomerName" type="text">
+			<button id="searchCustomerName" type="button" class="btn btn-sm btn-primary">Submit</button>
+			<br/>
+			See all:
+			<button id="seeAllCustomers" type="button" class="btn btn-sm btn-primary">Show current customers</button>
+			<br/>
 		</form>
 	</div>
 	
- 	
+ 	<div>
+ 		<h1>See customer transactions</h1>
+ 		<form>
+ 			<p>Enter customer ID: <input id="seeCustomerPayment" type="text"> </p>
+ 			<button id="seePaymentSubmit" type="button" class="btn btn-sm btn-primary">Submit</button>
+ 		</form>
+ 	</div>
 
+	<div>
+		<h1>Room information:</h1>
+		<form>
+			<button id="seeVacantRooms" type="button" class="btn btn-sm btn-primary">Vacant</button>
+			<button id="seeReservedRooms" type="button" class="btn btn-sm btn-primary">Reserved</button>
+		</form>
+	</div>
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -58,3 +107,4 @@
 
 </body>
 </html>
+

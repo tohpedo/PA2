@@ -1,104 +1,161 @@
 
-$("#createTodo").click(function(){
-	var input_id = $("#todoId").val();
-	var input_message = $("#todoMessage").val();
+
+$("#createNewCustomer").click(function(){
+	var ifname = $("#newCustomerFirstName").val();
+	var ilname = $("#newCustomerLastName").val();
+	var iphone_num = $("#newCustomerPhoneNumber").val(); 
+	var iaddress = $("#newCustomerBillingAddress").val();
+	var icity = $("#newCustomerBillingCity").val();
+	var istate = $("#newCustomerBillingState").val();
+	var izip = $("#newCustomerBillingZip").val();
+	var icheckin = $("#customerCheckIn").val();
+	var icheckout = $("#customerCheckOut").val();
 	var data = {
-			id:input_id,
-			message:input_message
+			fname:ifname,
+			lname:ilname,
+			phone_num:iphone_num,
+			address:iaddress,
+			city:icity,
+			state:istate,
+			zip:izip,
+			checkin:icheckin,
+			checkout:icheckout
 			};
 	$.ajax({
-		url:"/PA2/create",
-		method:"POST",
+		type: 'POST',
 		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-		dataType: "json",
-		success: function(data,status,xhr){
-			if(data.code == "Success"){
-				alert("Success!");
-			}else{
-				alert("Error! Message is " + data.message);
-			}
+		dataType: "text/html",
+		url:"/PA2/create",
+        data: data,
+        success: function(data){
+			$("#responseHeader").html(data.responseText);
+        	
 		},
 		error: function(data,status,xhr){
-			alert(JSON.stringify(data));
+			$("#responseHeader").html(data.responseText);
 		},
-		data: data
+	});
+	$("#Registration").toggle();
+	
+});
+$("#makeReservation").click(function(){
+	var icustid = $("#reserveCustId").val();
+	var iroom_num = $("#reserveRoomNum").val();
+	var data = {
+			cust_id: icustid,
+			room_num: iroom_num
+			};
+	$.ajax({
+		type: 'POST',
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		dataType: "text/html",
+		url:"/PA2/reserve",
+        data: data,
+        success: function(data){
+			$("#responseHeader").html(data.responseText);
+        	
+		},
+		error: function(data,status,xhr){
+			$("#responseHeader").html(data.responseText);
+		},
+	});
+	$("#RoomReservation").toggle();
+	
+});
+
+$("#searchCustomerID").click(function(){
+	var icustid = $("#findCustomerID").val();
+	var data = {
+			cust_id: icustid,
+			};
+	$.ajax({
+		type: 'POST',
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		dataType: "text/html",
+		url:"/PA2/findId",
+        data: data,
+        success: function(data){
+			$("#responseHeader").html(data.responseText);
+        	
+		},
+		error: function(data,status,xhr){
+			$("#responseHeader").html(data.responseText);
+		},
 	});
 });
 
-$("#getJSON").click(
-			function() {
-				var input_id = $("#todoId_get").val();
-				$.ajax({
-					type : 'GET',
-					url : "/PA2/json/" + input_id,
-					dataType: "json",
-					success : function(data,status,xhr) {
-						alert("Your message is: " + data.message);
-					},
-					error : function(data,status,xhr) {
-						alert(JSON.stringify(data));
-					}
-				});
-			});	
-
-$("#getXML").click(
-		function() {
-			var input_id = $("#todoId_get").val();
-			$.ajax({
-				type : 'GET',
-				url : "/PA2/xml/" + input_id,
-				dataType: "xml",
-				success : function(data,status,xhr) {
-					alert("Your message is: " + data.message);
-				},
-				error : function(data,status,xhr) {
-					alert(JSON.stringify(data));
-				}
-			});
-		});	
-
-$("#getAllJSON").click(
-		function() {		
-			$.ajax({
-				type : 'GET',
-				url : "/PA2/all/json",
-				success : function(data,status,xhr) {
-					alert(JSON.stringify(data));
-				},
-				error : function(data,status,xhr) {
-					alert(JSON.stringify(data));
-				}
-			});
-		});		
-$("#getAllXML").click(
-		function() {		
-			$.ajax({
-				type : 'GET',
-				url : "/PA2/all/xml",
-				success : function(data,status,xhr) {
-					alert(data);
-				},
-				error : function(data,status,xhr) {
-					alert(data);
-				}
-			});
-		});		
-$("#deleteTodo").click(
-	function() {
-		var input_id = $("#todoId_delete").val();
-		$.ajax({
-			url : "/PA2/delete/" + input_id,
-			method : "DELETE",
-			contentType : 'application/octet-stream; charset=utf-8',
-			success: function(data,status,xhr){
-				if(data.code == "Success"){
-					alert("Success!");
-				}else{
-					alert("Error! Message is " + data.message);
-				}
-			},
-			error: function(data,status,xhr){
-				alert(JSON.stringify(data));
-			},
-		});
+$("#searchCustomerName").click(function(){
+	var icustname = $("#findCustomerName").val();
+	var data = {
+			cust_name: icustname,
+			};
+	$.ajax({
+		type: 'POST',
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		dataType: "text/html",
+		url:"/PA2/findName",
+        data: data,
+        success: function(data){
+			$("#responseHeader").html(data.responseText);
+        	
+		},
+		error: function(data,status,xhr){
+			$("#responseHeader").html(data.responseText);
+		},
 	});
+});
+
+$("#seeAllCustomers").click(function(){
+	$.ajax({
+		type: 'GET',
+		dataType: "text/html",
+		url:"/PA2/all",
+        success: function(data){
+			$("#responseHeader").html(data.responseText);
+        	
+		},
+		error: function(data,status,xhr){
+			$("#responseHeader").html(data.responseText);
+		},
+	});
+});
+$("#submitPayment").click(function(){
+	var icustid = $("#paymentCustId").val();
+	var iroom_num = $("#paymentRoomNum").val();
+	var icard_num = $("#paymentCardNum").val(); 
+	var iexpdate = $("#paymentExpiration").val();
+	var iamount = $("#paymentAmount").val();
+	var data = {
+			cust_id:icustid,
+			room_num:iroom_num,
+			card_num:icard_num,
+			exp_date:iexpdate,
+			amount:iamount
+			};
+	$.ajax({
+		type: 'POST',
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		dataType: "text/html",
+		url:"/PA2/pay",
+        data: data,
+        success: function(data){
+			$("#responseHeader").html(data.responseText);
+        	
+		},
+		error: function(data,status,xhr){
+			$("#responseHeader").html(data.responseText);
+		},
+	});
+	$("#PaymentInformation").toggle();
+	
+});
+$("#newCustomer").click(function(){
+	$("#Registration").toggle();
+});
+$("#reserveRoom").click(function(){
+	$("#RoomReservation").toggle();
+});
+$("#makePayment").click(function(){
+	$("#PaymentInformation").toggle();
+});
+

@@ -3,6 +3,7 @@ package models;
 
 public class Customer {
 
+	private static int id_gen = 1;
 	
 	private String fname;
 	private String lname;
@@ -29,15 +30,20 @@ public class Customer {
 		this.zip = pZip;
 		this.checkin = pCheckin;
 		this.checkout = pCheckout;
-		
+		this.cust_id = getNextId();
 	}
 	
 	
 
 	public Customer(){
-	
+		this.cust_id = getNextId();
 	}
 	
+	public static int getNextId(){
+		id_gen++;
+		int i = id_gen;
+		return i;
+	}
 	
 	
 	
@@ -104,45 +110,27 @@ public class Customer {
 		this.fname = fname;
 	}
 	public int getCust_id() {
-		return cust_id;
+		return this.cust_id;
 	}
 
 	public void setCust_id(int cust_id) {
 		this.cust_id = cust_id;
 	}
-	
-	
-	
-	
-	
-
-
-	/*
-	
-	
-	
-	
-	public static void main(String args[]){
-		
-		
-		
-		Customer torbir = new Customer("","","","","","","","","");
-		Customer terror = new Customer();
-		
-		System.out.println(torbir.getCustomer_id());
-		System.out.println(terror.getCustomer_id());
-		
-		
-		
-		
-		
-		
-		
-		
+	@Override
+	public String toString(){
+		String output = "Name: " + getFname() + " " + getLname() + " -- ID: " + getCust_id() + " -- Phone Number: " + getPhone_num() + " -- Address: " + getAddress() + " " + getCity() + " " + getState() + " " + getZip();  
+		return output;
 	}
-*/
+	
+	public String toStringSimple(){
+		String output = "Name: " + getFname() + " " + getLname() + " -- ID: " + getCust_id() + " -- Phone Number: " + getPhone_num();  
+		return output;
+	}
+	
+	
 
-
+	
+	
 
 
 	

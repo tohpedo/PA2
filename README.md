@@ -1,10 +1,10 @@
 # PA1
 
 Torbir Dhaliwal tsdhlwal
+Denzel Young
+
+Add project to server and run server
+URL is localhost:8080/PA2/static/index.html . MYSQL must have username = root and pw = greatsqldb (or you must change MySQLConnector.java)
 
 
-Must be run on localhost on port 3306 with username = root and pw = greatsqldb
-
-Start server, run the servlet, then run HotelReservationSystem as a java application
-
-I only managed to get 7 of the functional requirements to work.
+Get vacancies, get reservations, and get transactions[customer_id] are not implemented.

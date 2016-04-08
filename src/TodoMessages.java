@@ -1,5 +1,6 @@
 
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,168 +22,140 @@ import javax.xml.namespace.QName;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import connectors.SQLConnector;
+import models.Customer;
+import models.Transaction;
+
 
 @Path("/")
 public class TodoMessages{
 	
+	private static final long serialVersionUID = 1L;
+	private static SQLConnector sql_conn = new SQLConnector();
+	
+	
 	public TodoMessages() {
+		sql_conn.initializeDB();
 	}
-
+	
 	@POST
 	@Consumes({MediaType.APPLICATION_FORM_URLENCODED})
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({MediaType.TEXT_HTML})
 	@Path("/create")
-	public Response createMessage(@FormParam("id") String p_id, @FormParam("message") String p_message){
-		int id = Integer.parseInt(p_id);
-		System.out.println("Creating Todo with id: " + id);
-		System.out.println("And message: " + p_message);
-		List<TodoMessage> m = TodoMessageList.getMessages();
-		TodoMessage tm = new TodoMessage();
-		tm.setMessage(p_message);
-		tm.setId(id);
-		ServerResponse s = new ServerResponse();
+	public Response createMessage(@FormParam("address") String address, @FormParam("checkin") String checkin,
+								@FormParam("checkout") String checkout, @FormParam("fname") String fname,
+								@FormParam("lname") String lname, @FormParam("phone_num") String phone_num,
+								@FormParam("state") String state, @FormParam("city") String city,
+								@FormParam("zip") String zip){
+		Customer tmp = new Customer();
+		tmp.setAddress(address);
+		tmp.setCheckin(checkin);
+		tmp.setCheckout(checkout);
+		tmp.setCity(city);
+		tmp.setFname(fname);
+		tmp.setLname(lname);
+		tmp.setPhone_num(phone_num);
+		tmp.setState(state);
+		tmp.setZip(zip);
 		try{
-			m.add(tm);
-			TodoMessageList.setMessages(m);
-			s.code = "Success";
-			s.message = "Your message has successfully been created!";
+			sql_conn.insertCustomer(tmp);
 		}
 		catch(Exception e){
-			s.code = "Error";
-			s.message = "Unable to insert your message";
+			String success = "<h3> Error occured while creating customer </h3>";
+			return Response.ok(success,"text/html").build();
 		}
-		String json = "";	
-		try {
-			json = new ObjectMapper().writeValueAsString(s);
-		} catch (Exception e) {
-			return Response.status(500).build();
-		}
-		return Response.ok(json,"application/json").build();
+		String success = "<h3> You have successfully inserted a customer with id#" + tmp.getCust_id() + "</h3>";
+		return Response.ok(success,"text/html").build();
 	}
 	
-	
-
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON })
-	@Path("/json/{id}")
-	public Response getMessageJSON(@PathParam("id") String p_id) {
-		System.out.println("Getting message with id#" + p_id + " using JSON...");
-		int id = Integer.parseInt(p_id);
-		List<TodoMessage> m = TodoMessageList.getMessages();
-		TodoMessage tmp = new TodoMessage();
-		tmp.setId(id);
-		int index = m.indexOf(tmp);
-		TodoMessage todo;
-		if(index >= 0) {
-			todo = m.get(index);
-		}else{
-			todo = new TodoMessage();
-			todo.setMessage("Unable to retrieve your message");
+	@POST
+	@Consumes({MediaType.APPLICATION_FORM_URLENCODED})
+	@Produces({MediaType.TEXT_HTML})
+	@Path("/reserve")
+	public Response reserveRoom(@FormParam("cust_id") String cust_id, @FormParam("room_num") String room_num){	
+		try{
+			sql_conn.reserveRoom(Integer.parseInt(cust_id),Integer.parseInt(room_num));
 		}
-		String json = "";	
-		System.out.println("Your message is:" + todo.getMessage());
-		try {
-			json = new ObjectMapper().writeValueAsString(todo);
-		} catch (Exception e) {
-			return Response.status(500).build();
+		catch(Exception e){
+			String success = "<h3> Error making reservation </h3>";
+			return Response.ok(success,"text/html").build();
 		}
-		return Response.ok(json,"application/json").build();
+		String success = "<h3> You have successfully made your reservation</h3>";
+		return Response.ok(success,"text/html").build();
 	}
 	
-	@GET
-	@Produces({ MediaType.APPLICATION_XML })
-	@Path("/xml/{id}")
-	public Response getMessageXML(@PathParam("id") String p_id) {
-		System.out.println("Getting message with id#" + p_id + " using XML...");
-		int id = Integer.parseInt(p_id);
-		List<TodoMessage> m = TodoMessageList.getMessages();
-		TodoMessage tmp = new TodoMessage();
-		tmp.setId(id);
-		int index = m.indexOf(tmp);
-		TodoMessage todo;
-		if(index >= 0) {
-			todo = m.get(index);
-		}else{
-			todo = new TodoMessage();
-			todo.setMessage("Unable to retrieve your message");
+	@POST
+	@Consumes({MediaType.APPLICATION_FORM_URLENCODED})
+	@Produces({MediaType.TEXT_HTML})
+	@Path("/findId")
+	public Response getCustomerId(@FormParam("cust_id") String cust_id){	
+		String output = "";
+		try{
+			output = sql_conn.getCustomer(Integer.parseInt(cust_id));
 		}
-		String json = "";	
-		System.out.println("Your message is:" + todo.getMessage());
-		try {
-			json = new ObjectMapper().writeValueAsString(todo);
-		} catch (Exception e) {
-			return Response.status(500).build();
+		catch(Exception e){
+			output = "<h3> Error while finding customer </h3>";
+			return Response.ok(output,"text/html").build();
 		}
-		return Response.ok(json,"application/xml").build();
+		String success = "<h3> " + output + "</h3>";
+		return Response.ok(output,"text/html").build();
 	}
 	
-	@DELETE
-	@Produces({ MediaType.APPLICATION_JSON })
-	@Path("/delete/{id}")
-	public Response deleteId(@PathParam("id") String p_id) {
-		System.out.println("Attempting to delete Todo with id = " + p_id);
-		int id = Integer.parseInt(p_id);
-		List<TodoMessage> m = TodoMessageList.getMessages();
-		TodoMessage tmp = new TodoMessage();
-		tmp.setId(id);
-		int index = m.indexOf(tmp);
-		ServerResponse s = new ServerResponse();
-		if(index >= 0) {
-			m.remove(index);
-			s.code = "Success";
-			s.message = "Todo deleted successfully";
-			System.out.println("Message deleted succesfully.");
+	@POST
+	@Consumes({MediaType.APPLICATION_FORM_URLENCODED})
+	@Produces({MediaType.TEXT_HTML})
+	@Path("/findName")
+	public Response getCustomerName(@FormParam("cust_name") String cust_name){	
+		String output = "";
+		try{
+			output = sql_conn.getCustomersByName(cust_name);
 		}
-		else{
-			s.code = "Error";
-			s.message = "Unable to delete Todo";
-			System.out.println("Error deleting message");
+		catch(Exception e){
+			output = "<h3> Error while finding customer </h3>";
+			return Response.ok(output,"text/html").build();
 		}
-		String json = "";	
-		try {
-			json = new ObjectMapper().writeValueAsString(s);
-		} catch (Exception e) {
-			return Response.status(500).build();
-		}
-		return Response.ok(json,"application/json").build();
-	}
-
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON })
-	@Path("/all/json")
-	public Response getAllMessagesJSON() {
-		System.out.println("Getting all messages using JSON...");
-		List<TodoMessage> m = TodoMessageList.getMessages();
-		m.forEach(todo->System.out.println("ID# " + todo.getId() + " : " + todo.getMessage()));
-		String json = "";	
-		try {
-			json = new ObjectMapper().writeValueAsString(m);
-		} catch (Exception e) {
-			return Response.status(500).build();
-		}
-		return Response.ok(json,"application/json").build();
+		String success = "<h3> " + output + "</h3>";
+		return Response.ok(output,"text/html").build();
 	}
 	
 	@GET
-	@Produces({ MediaType.APPLICATION_XML })
-	@Path("/all/xml")
-	public Response getAllMessagesXML() {
-		System.out.println("Getting all messages using XML...");
-		List<TodoMessage> m = TodoMessageList.getMessages();
-		m.forEach(todo->System.out.println("ID# " + todo.getId() + " : " + todo.getMessage()));
-		String xml = "";	
-		try {
-			xml = new ObjectMapper().writeValueAsString(m);
-		} catch (Exception e) {
-			return Response.status(500).build();
+	@Produces({ MediaType.TEXT_HTML })
+	@Path("/all")
+	public Response getCurrentCustomers() {
+		String output = "";
+		try{
+			output = sql_conn.getCurrentCustomers();
 		}
-		return Response.ok(xml,"application/xml").build();
+		catch(Exception e){
+			output = "<h3> Error while finding customers </h3>";
+			return Response.ok(output,"text/html").build();
+		}
+		String success = "<h3> " + output + "</h3>";
+		return Response.ok(output,"text/html").build();
 	}
 	
-	
-	private JAXBElement<TodoMessage> toXml(TodoMessage message){
-		return new JAXBElement<TodoMessage>(new QName("todoMessage"), TodoMessage.class, message);
+	@POST
+	@Consumes({MediaType.APPLICATION_FORM_URLENCODED})
+	@Produces({MediaType.TEXT_HTML})
+	@Path("/pay")
+	public Response createPayment(@FormParam("cust_id") String cust_id, @FormParam("room_num") String room_num,
+								@FormParam("card_num") String card_num, @FormParam("exp_date") String exp_date,
+								@FormParam("amount") String amount){
+		Transaction tmp = new Transaction();
+		tmp.setAmount(amount);
+		tmp.setCc(card_num);
+		tmp.setExp_date(exp_date);
+		tmp.setPayee_id(Integer.parseInt(cust_id));
+		tmp.setRoom_num(Integer.parseInt(room_num));
+		try{
+			sql_conn.makePayment(tmp);
+		}
+		catch(Exception e){
+			String success = "<h3> Error occured while making payment </h3>";
+			return Response.ok(success,"text/html").build();
+		}
+		String success = "<h3> You have successfully made a payment. Your transaction ID is  " + tmp.getTrans_id() + "</h3>";
+		return Response.ok(success,"text/html").build();
 	}
 	
-
 }
